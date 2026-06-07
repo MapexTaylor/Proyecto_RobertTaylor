@@ -9,8 +9,6 @@ export default function LoginScreen({navigation}:any){
     }
 
     const handleLoginClient = () => {
-      navigation.navigate("ClientSearch")
-      
       navigation.reset({
       index: 0,
       routes: [{ name: "ClientSearch" }],
