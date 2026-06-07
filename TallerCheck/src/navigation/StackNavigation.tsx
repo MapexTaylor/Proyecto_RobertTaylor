@@ -9,7 +9,6 @@ import TallerHomeScreen from "../screens/TallerHomeScreen";
 
 export type RootStackParamList = {
     Login: undefined;
-    TallerHome: undefined;
     UserTabs: undefined;
     ClientSearch: undefined;
     TallerLogin: undefined;
@@ -21,7 +20,6 @@ export default function StackNavigator(){
     return(
         <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Login" component={LoginScreen}/>
-            <Stack.Screen name="TallerHome" component={TallerHomeScreen}/>
             <Stack.Screen name="UserTabs" component={TabsNavigation}/>
             <Stack.Screen name="ClientSearch" component={ClientSearchScreen}/>
             <Stack.Screen name="TallerLogin" component={TallerLoginScreen}/>
