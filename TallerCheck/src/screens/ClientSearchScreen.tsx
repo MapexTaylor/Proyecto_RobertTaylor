@@ -1,0 +1,264 @@
+import { useState } from "react";
+import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
+import CustomInput from "../components/CustomInput";
+import CustomButton from "../components/CustomButton";
+import { ordersData } from "../data/ordersData";
+import { navigationRef } from "../navigation/NavigationService";
+
+export default function ClientSearchScreen() {
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState("");
+  const [orderFound, setOrderFound] = useState<any>(null);
+
+  const handleLogout = () =>{
+          if(navigationRef.isReady()){
+              navigationRef.reset({
+                  //inicie el arrelo routes, que indica la vista actual al momento de reset el stack de navegacion
+                  index: 0,
+                  //es un arreglo de objetos, para el cual cada objeto representa una ruta en el nuevo
+                  routes: [{name: 'Login'}]
+              })
+          }
+      }
+
+  const handleSearch = () => {
+    setCodeError("");
+    setOrderFound(null);
+
+    if (code.trim() === "") {
+      setCodeError("Debe ingresar el código de reparación.");
+      return;
+    }
+
+    if (!code.toUpperCase().startsWith("TC-")) {
+      setCodeError("El código debe iniciar con TC-. Ejemplo: TC-001");
+      return;
+    }
+
+    const foundOrder = ordersData.find(
+      (order) => order.code.toUpperCase() === code.toUpperCase().trim()
+    );
+
+    if (!foundOrder) {
+      Alert.alert(
+        "No encontrado",
+        "No se encontró ninguna reparación con ese código."
+      );
+      return;
+    }
+
+    setOrderFound(foundOrder);
+  };
+
+  const getClientMessage = (status: string) => {
+    if (status === "Recibido") {
+      return "Su artículo fue recibido por el taller y está pendiente de revisión.";
+    }
+
+    if (status === "En diagnóstico") {
+      return "El técnico está revisando el problema reportado.";
+    }
+
+    if (status === "En reparación") {
+      return "Su artículo está siendo reparado actualmente.";
+    }
+
+    if (status === "Listo para entrega") {
+      return "Su reparación ya está lista. Puede pasar al taller para retirarla.";
+    }
+
+    if (status === "Entregado") {
+      return "Esta reparación ya fue entregada al cliente.";
+    }
+
+    return "Estado no disponible.";
+  };
+
+  const getStatusStyle = (status:string) => {
+    if (status === "Recibido") {
+    return styles.receivedStatus;
+    }
+
+    if (status === "En diagnóstico") {
+        return styles.diagnosisStatus;
+    }
+
+    if (status === "En reparación") {
+        return styles.repairStatus;
+    }
+
+    if (status === "Listo para entrega") {
+        return styles.readyStatus;
+    }
+
+    if (status === "Entregado") {
+        return styles.deliveredStatus;
+    }
+
+    return styles.defaultStatus;
+  }
+
+
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <Text style={styles.title}>Consulta de Reparación</Text>
+
+      <Text style={styles.subtitle}>
+        Ingrese el código que le entregó el taller para revisar el estado de su reparación.
+      </Text>
+
+      <View style={styles.searchCard}>
+        <View style={styles.input}>
+            <CustomInput
+            type="text"
+            placeholder="Ejemplo: TC-001"
+            value={code}
+            onChange={setCode}
+            error={codeError}
+            />
+        </View>
+            <CustomButton
+            title="Buscar reparación"
+            onPress={handleSearch}
+            variant="primary"
+            />
+      </View>
+
+      {orderFound && (
+        <View style={styles.resultCard}>
+          <Text style={styles.resultTitle}>Resultado de la reparación</Text>
+
+          <Text style={styles.code}>{orderFound.code}</Text>
+
+          <Text style={styles.label}>Cliente:</Text>
+          <Text style={styles.value}>{orderFound.clientName}</Text>
+
+          <Text style={styles.label}>Vehículo:</Text>
+          <Text style={styles.value}>{orderFound.marca}</Text>
+
+          <Text style={styles.label}>Problema reportado:</Text>
+          <Text style={styles.value}>{orderFound.problem}</Text>
+
+          <Text style={styles.label}>Fecha de ingreso:</Text>
+          <Text style={styles.value}>{orderFound.entryDate}</Text>
+
+          <Text style={styles.label}>Estado actual:</Text>
+          <Text style={[styles.status, getStatusStyle(orderFound.status)]}>{orderFound.status}</Text>
+
+          <Text style={styles.message}>
+            {getClientMessage(orderFound.status)}
+          </Text>
+        </View>
+      )}
+      <CustomButton 
+            title={"Volver al inicio!"} 
+            onPress={handleLogout}/>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#eaeaea",
+  },
+  contentContainer: {
+    flexGrow: 1,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 27,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 15,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#333",
+  },
+  searchCard: {
+    backgroundColor: "#fff",
+    width: "100%",
+    maxWidth: 420,
+    padding: 20,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 20,
+    alignItems:'center'
+  },
+  input:{
+    alignItems:'center',
+    marginLeft:45
+  },
+  resultCard: {
+    backgroundColor: "#fff",
+    width: "100%",
+    maxWidth: 420,
+    padding: 20,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  resultTitle: {
+    fontSize: 21,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  code: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 15,
+    color: "#1f6feb",
+  },
+  label: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginTop: 8,
+  },
+  value: {
+    fontSize: 15,
+    color: "#333",
+  },
+  status: {
+    padding: 8,
+    borderRadius: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+    marginTop: 5,
+  },
+  receivedStatus:{
+    backgroundColor: '#8194ff'
+  },
+  diagnosisStatus:{
+    backgroundColor:'#fdba62'
+  },
+  repairStatus:{
+    backgroundColor:'#f5ff69'
+  },
+  readyStatus:{
+    backgroundColor:'#d7ff67'
+  },
+  deliveredStatus:{
+    backgroundColor:'#1eff00'
+  },
+  defaultStatus:{
+    backgroundColor: "#ffe0b2",
+  },
+  message: {
+    marginTop: 15,
+    fontSize: 20,
+    textAlign: "center",
+    color: "#333",
+    fontWeight:'bold'
+  },
+});
