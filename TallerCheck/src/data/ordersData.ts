@@ -1,0 +1,32 @@
+export const ordersData = [
+  {
+    id: "1",
+    code: "TC-001",
+    clientName: "Carlos Méndez",
+    phone: "99999999",
+    marca: "Toyota",
+    problem: "No enciende",
+    entryDate: "06/06/2026",
+    status: "En reparación",
+  },
+  {
+    id: "2",
+    code: "TC-002",
+    clientName: "María López",
+    phone: "88888888",
+    marca: "Mitsubishi",
+    problem: "Amortiguadores",
+    entryDate: "05/06/2026",
+    status: "En diagnóstico",
+  },
+  {
+    id: "3",
+    code: "TC-003",
+    clientName: "José Ramírez",
+    phone: "77777777",
+    marca: "Hyundai",
+    problem: "Bomba de gasolina",
+    entryDate: "03/06/2026",
+    status: "Entregado",
+  },
+];
