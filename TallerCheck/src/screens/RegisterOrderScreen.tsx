@@ -38,7 +38,7 @@ export default function RegisterOrderScreen() {
     }
 
     if (item.trim() === "") {
-      setItemError("Marca de vehículo.");
+      setItemError("Debe ingresar el vehículo recibido.");
       isValid = false;
     }
 
@@ -148,15 +148,15 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 420,
     padding: 20,
-    paddingLeft:60,
     borderRadius: 15,
     borderWidth: 1,
     borderColor: "#ccc",
     alignItems: "center",
   },
+
   buttonContainer: {
     width: "100%",
-    marginLeft:15,
+    alignItems: "center",
     marginTop: 10,
   },
 });
