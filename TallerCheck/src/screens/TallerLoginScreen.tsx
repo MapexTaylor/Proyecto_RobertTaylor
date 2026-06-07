@@ -29,8 +29,8 @@ export default function TallerLoginScreen({ navigation }: any) {
       if(password.trim() === ""){
         setErrorPass("La contraseña es obligatoria");
         isValid = false;
-      } else if(password.length < 4){
-        setErrorPass("La contraseña es muy debil");
+      } else if (password.length <= 4) {
+        setErrorPass("La contraseña debe tener más de 4 caracteres.");
         isValid = false;
       }
 
