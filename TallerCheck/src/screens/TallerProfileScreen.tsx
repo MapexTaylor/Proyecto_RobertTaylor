@@ -1,18 +1,14 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import { navigationRef } from "../navigation/NavigationService";
 import CustomButton from "../components/CustomButton";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function TallerProfileScreen() {
 
+  const {logout} = useAuth();
+
   const handleLogout = () =>{
-        if(navigationRef.isReady()){
-            navigationRef.reset({
-                //inicie el arrelo routes, que indica la vista actual al momento de reset el stack de navegacion
-                index: 0,
-                //es un arreglo de objetos, para el cual cada objeto representa una ruta en el nuevo
-                routes: [{name: 'Login'}]
-            })
-        }
+        logout();
     }
   
   return (

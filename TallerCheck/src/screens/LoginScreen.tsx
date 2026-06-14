@@ -1,18 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import CustomButton from '../components/CustomButton';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function LoginScreen({navigation}:any){
+
+    const {loginAsCliente} = useAuth();
 
     const handleLoginTaller = () => {
         navigation.navigate("TallerLogin");
     }
 
     const handleLoginClient = () => {
-      navigation.reset({
-      index: 0,
-      routes: [{ name: "ClientSearch" }],
-      });
+      loginAsCliente();
     }
 
     return (

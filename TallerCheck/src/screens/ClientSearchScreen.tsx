@@ -4,22 +4,17 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { ordersData } from "../data/ordersData";
 import { navigationRef } from "../navigation/NavigationService";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function ClientSearchScreen() {
+  const {logout} = useAuth();
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState("");
   const [orderFound, setOrderFound] = useState<any>(null);
 
   const handleLogout = () =>{
-          if(navigationRef.isReady()){
-              navigationRef.reset({
-                  //inicie el arrelo routes, que indica la vista actual al momento de reset el stack de navegacion
-                  index: 0,
-                  //es un arreglo de objetos, para el cual cada objeto representa una ruta en el nuevo
-                  routes: [{name: 'Login'}]
-              })
-          }
-      }
+    logout();      
+  }
 
   const handleSearch = () => {
     setCodeError("");
