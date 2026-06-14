@@ -3,9 +3,12 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 
 export default function TallerLoginScreen({ navigation }: any) {
+
+    const {loginAsTaller} = useAuth();
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
@@ -38,10 +41,7 @@ export default function TallerLoginScreen({ navigation }: any) {
         return;
       }
 
-      navigation.reset({
-      index: 0,
-      routes: [{ name: "UserTabs" }],
-      });
+      loginAsTaller();
     }
 
     return (
