@@ -1,43 +1,98 @@
-import { ScrollView, View, Text, StyleSheet } from "react-native";
-import { ordersData } from "../data/ordersData";
+import { ScrollView, View, Text, StyleSheet, FlatList } from "react-native";
+import { OrderStatus, useOrders } from "../contexts/OrdersContext";
+import CustomButton from "../components/CustomButton";
 
 export default function OrdersScreen() {
-  const activeOrders = ordersData.filter(
+  const { orders, updateOrderStatus } = useOrders();
+
+  const activeOrders = orders.filter(
     (order) => order.status !== "Entregado"
   );
 
+  const getNextStatus = (currentStatus : OrderStatus): OrderStatus => {
+    if(currentStatus === 'Recibido'){
+      return 'En diagnóstico';
+    }
+
+    if(currentStatus === 'En diagnóstico'){
+      return 'En reparación';
+    }
+
+    if(currentStatus === 'En reparación'){
+      return 'Listo para entrega';
+    }
+
+    if(currentStatus === 'Listo para entrega'){
+      return 'Entregado';
+    }
+
+    return "Entregado";
+  };
+
+  const getStatusStyle = (status: OrderStatus) => {
+  if (status === "Recibido") {
+    return styles.receivedStatus;
+  }
+
+  if (status === "En diagnóstico") {
+    return styles.diagnosisStatus;
+  }
+
+  if (status === "En reparación") {
+    return styles.repairStatus;
+  }
+
+  if (status === "Listo para entrega") {
+    return styles.readyStatus;
+  }
+
+  if (status === "Entregado") {
+    return styles.deliveredStatus;
+  }
+
+  return styles.defaultStatus;
+};
+
+  const handleUpdateStatus = (code: string, currentStatus: OrderStatus) => {
+    const nextStatus = getNextStatus(currentStatus);
+
+    updateOrderStatus(code, nextStatus);
+  };
+  
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Órdenes Activas</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Órdenes activas 🛠️</Text>
 
-      <Text style={styles.subtitle}>
-        Reparaciones que todavía están en proceso dentro del taller.
-      </Text>
+      <FlatList
+        data={activeOrders}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>No hay órdenes activas.</Text>
+        }
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.code}>{item.code}</Text>
+            <Text>Cliente: {item.clientName}</Text>
+            <Text>Teléfono: {item.phone}</Text>
+            <Text>Marca de vehículo: {item.marca}</Text>
+            <Text>Matricula: {item.matricula}</Text>
+            <Text>Problema: {item.problem}</Text>
+            <Text>Fecha de ingreso: {item.entryDate}</Text>
 
-      {activeOrders.map((order) => (
-        <View key={order.id} style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.code}>{order.code}</Text>
-
-            <Text
-              style={[
-                styles.status,
-                order.status === "En reparación" && styles.repairStatus,
-                order.status === "En diagnóstico" && styles.diagnosisStatus,
-              ]}
-            >
-              {order.status}
+            <Text style={[styles.status, getStatusStyle(item.status)]}>
+              Estado actual: {item.status}
             </Text>
-          </View>
 
-          <Text style={styles.text}>Cliente: {order.clientName}</Text>
-          <Text style={styles.text}>Teléfono: {order.phone}</Text>
-          <Text style={styles.text}>Vehículo: {order.marca}</Text>
-          <Text style={styles.text}>Problema: {order.problem}</Text>
-          <Text style={styles.date}>Ingreso: {order.entryDate}</Text>
-        </View>
-      ))}
-    </ScrollView>
+            <CustomButton
+              title="Avanzar estado"
+              onPress={() => handleUpdateStatus(item.code, item.status)}
+              variant="primary"
+            />
+          </View>
+        )}
+      />
+    </View>
   );
 }
 
@@ -46,18 +101,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#eaeaea",
     padding: 20,
+    alignItems:'center'
   },
   title: {
-    fontSize: 27,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 15,
-    textAlign: "center",
-    marginBottom: 20,
-    color: "#333",
+    marginBottom: 25,
   },
   card: {
     backgroundColor: "#fff",
@@ -67,29 +117,49 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
   },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-  },
   code: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: "bold",
+    margin:10,
+    textAlign:'center'
   },
   status: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    textAlign:'center',
     borderRadius: 10,
     fontWeight: "bold",
     backgroundColor: "#ddd",
   },
-  repairStatus: {
-    backgroundColor: "#ffe0b2",
+  receivedStatus: {
+  backgroundColor: "#e0e0e0",
+  color: "#333",
   },
+
   diagnosisStatus: {
     backgroundColor: "#bbdefb",
+    color: "#0d47a1",
   },
+
+  repairStatus: {
+    backgroundColor: "#ffe0b2",
+    color: "#e65100",
+  },
+
+  readyStatus: {
+    backgroundColor: "#c8e6c9",
+    color: "#1b5e20",
+  },
+
+  deliveredStatus: {
+    backgroundColor: "#d1c4e9",
+    color: "#311b92",
+  },
+
+  defaultStatus: {
+    backgroundColor: "#ddd",
+    color: "#333",
+  },
+  
   text: {
     fontSize: 15,
     marginBottom: 4,
@@ -98,5 +168,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 8,
     color: "#555",
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
   },
 });

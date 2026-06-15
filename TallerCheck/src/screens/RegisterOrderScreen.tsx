@@ -2,16 +2,22 @@ import { useState } from "react";
 import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import { useOrders } from "../contexts/OrdersContext";
 
 export default function RegisterOrderScreen() {
+
+  const {addOrder} = useOrders();
+
   const [clientName, setClientName] = useState("");
   const [phone, setPhone] = useState("");
-  const [item, setItem] = useState("");
+  const [marca, setmarca] = useState("");
+  const [matricula, setMatricula] = useState("");
   const [problem, setProblem] = useState("");
 
   const [clientNameError, setClientNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [itemError, setItemError] = useState("");
+  const [marcaError, setmarcaError] = useState("");
+  const [matriculaError, setMatriculaError] = useState("");
   const [problemError, setProblemError] = useState("");
 
   const handleSave = () => {
@@ -19,7 +25,7 @@ export default function RegisterOrderScreen() {
 
     setClientNameError("");
     setPhoneError("");
-    setItemError("");
+    setmarcaError("");
     setProblemError("");
 
     if (clientName.trim() === "") {
@@ -37,9 +43,26 @@ export default function RegisterOrderScreen() {
       isValid = false;
     }
 
-    if (item.trim() === "") {
-      setItemError("Debe ingresar el vehículo recibido.");
+    if (marca.trim() === "") {
+      setmarcaError("Debe ingresar el vehículo recibido.");
       isValid = false;
+    }
+
+    const regex = /\d{4}$/;
+
+    if(!matricula.startsWith('HN')){
+      setMatriculaError("Matricula invalida. Debe de comenzar con 'HN'")
+      isValid = false;
+    }else {
+      if(matricula.length!==7){
+        setMatriculaError("Matricula invalida. Debe de contener 7 caracteres");
+        isValid = false;
+      }else{
+        if(!regex.test(matricula)){
+          setMatriculaError("Matricula invalida. Debe de terminar con 4 numeros");
+          isValid = false;
+        }
+      }
     }
 
     if (problem.trim() === "") {
@@ -51,7 +74,15 @@ export default function RegisterOrderScreen() {
       return;
     }
 
-    const generatedCode = "TC-004";
+    
+
+    const generatedCode = addOrder({
+      clientName,
+      phone,
+      marca: marca,
+      matricula: matricula,
+      problem,
+    });
 
     Alert.alert(
       "Orden registrada",
@@ -60,8 +91,15 @@ export default function RegisterOrderScreen() {
 
     setClientName("");
     setPhone("");
-    setItem("");
+    setmarca("");
     setProblem("");
+    setMatricula("")
+
+    setClientNameError("");
+    setPhoneError("");
+    setmarcaError("");
+    setMatriculaError("");
+    setProblemError("");
   };
 
   return (
@@ -69,14 +107,15 @@ export default function RegisterOrderScreen() {
     style={styles.container}
     contentContainerStyle={styles.contentContainer}
   >
-    <Text style={styles.title}>Nueva Orden</Text>
+    <Text style={styles.title}>Nueva Orden 📝</Text>
 
     <Text style={styles.subtitle}>
       Registre los datos principales de la reparación.
     </Text>
 
     <View style={styles.form}>
-      <CustomInput
+      <View style={styles.input}>
+        <CustomInput
         type="text"
         placeholder="Nombre del cliente"
         value={clientName}
@@ -95,9 +134,17 @@ export default function RegisterOrderScreen() {
       <CustomInput
         type="text"
         placeholder="Vehículo recibido"
-        value={item}
-        onChange={setItem}
-        error={itemError}
+        value={marca}
+        onChange={setmarca}
+        error={marcaError}
+      />
+
+      <CustomInput
+        type="text"
+        placeholder="Matricula de su vehiculo"
+        value={matricula.toUpperCase()}
+        onChange={(text) => setMatricula(text.toUpperCase())}
+        error={matriculaError}
       />
 
       <CustomInput
@@ -107,7 +154,7 @@ export default function RegisterOrderScreen() {
         onChange={setProblem}
         error={problemError}
       />
-
+      </View>
       <View style={styles.buttonContainer}>
         <CustomButton
           title="Registrar orden"
@@ -153,7 +200,10 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     alignItems: "center",
   },
-
+  input: {
+    width: "100%",
+    alignItems: "center",
+  },
   buttonContainer: {
     width: "100%",
     alignItems: "center",

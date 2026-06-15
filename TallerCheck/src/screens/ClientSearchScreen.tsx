@@ -2,15 +2,16 @@ import { useState } from "react";
 import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
-import { ordersData } from "../data/ordersData";
-import { navigationRef } from "../navigation/NavigationService";
 import { useAuth } from "../contexts/AuthContext";
+import { useOrders, Order } from "../contexts/OrdersContext";
 
 export default function ClientSearchScreen() {
+
+  const { findOrderByCode } = useOrders();
   const {logout} = useAuth();
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState("");
-  const [orderFound, setOrderFound] = useState<any>(null);
+  const [orderFound, setOrderFound] = useState<Order | null>(null);
 
   const handleLogout = () =>{
     logout();      
@@ -30,9 +31,7 @@ export default function ClientSearchScreen() {
       return;
     }
 
-    const foundOrder = ordersData.find(
-      (order) => order.code.toUpperCase() === code.toUpperCase().trim()
-    );
+    const foundOrder = findOrderByCode(code);
 
     if (!foundOrder) {
       Alert.alert(

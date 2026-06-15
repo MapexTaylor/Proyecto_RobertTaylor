@@ -1,10 +1,29 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../components/CustomButton";
+import { useOrders } from "../contexts/OrdersContext";
 
 export default function TallerHomeScreen({ navigation }: any) {
+  const { orders } = useOrders();
+
+  const activeOrders = orders.filter(
+    (order)=>order.status !== "Entregado"
+  ).length;
+
+  const diagnosisOrders = orders.filter(
+    (order)=>order.status === "En diagnóstico"
+  ).length;
+
+  const repairingOrders = orders.filter(
+    (order)=>order.status === "En reparación"
+  ).length;
+
+  const readyToGoOrders = orders.filter(
+    (order) => order.status === "Listo para entrega"
+  ).length;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Panel del Taller</Text>
+      <Text style={styles.title}>Panel del Taller 🔧</Text>
 
       <Text style={styles.subtitle}>
         Administra y revisa el estado de las reparaciones registradas.
@@ -12,22 +31,22 @@ export default function TallerHomeScreen({ navigation }: any) {
 
       <View style={styles.summaryContainer}>
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>3</Text>
+          <Text style={styles.summaryNumber}>{activeOrders}</Text>
           <Text style={styles.summaryText}>Órdenes activas</Text>
         </View>
 
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>1</Text>
+          <Text style={styles.summaryNumber}>{diagnosisOrders}</Text>
           <Text style={styles.summaryText}>En diagnóstico</Text>
         </View>
 
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>1</Text>
+          <Text style={styles.summaryNumber}>{repairingOrders}</Text>
           <Text style={styles.summaryText}>En reparación</Text>
         </View>
 
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>1</Text>
+          <Text style={styles.summaryNumber}>{readyToGoOrders}</Text>
           <Text style={styles.summaryText}>Listas para entrega</Text>
         </View>
       </View>

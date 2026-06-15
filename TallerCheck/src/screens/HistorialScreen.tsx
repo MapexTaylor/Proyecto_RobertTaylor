@@ -1,8 +1,10 @@
 import { ScrollView, View, Text, StyleSheet } from "react-native";
-import { ordersData } from "../data/ordersData";
+import { useOrders } from "../contexts/OrdersContext";
 
 export default function HistoryScreen() {
-  const deliveredOrders = ordersData.filter(
+  const { orders } = useOrders();
+
+  const deliveredOrders = orders.filter(
     (order) => order.status === "Entregado"
   );
 
@@ -24,6 +26,7 @@ export default function HistoryScreen() {
           <Text style={styles.text}>Cliente: {order.clientName}</Text>
           <Text style={styles.text}>Teléfono: {order.phone}</Text>
           <Text style={styles.text}>Vehículo: {order.marca}</Text>
+          <Text style={styles.text}>Matrícula: {order.matricula}</Text>
           <Text style={styles.text}>Problema: {order.problem}</Text>
           <Text style={styles.date}>Fecha de ingreso: {order.entryDate}</Text>
         </View>
