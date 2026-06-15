@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {View, TextInput,TouchableOpacity,StyleSheet, KeyboardTypeOptions,Text} from "react-native";
+import {View, TextInput,TouchableOpacity,StyleSheet, KeyboardTypeOptions,Text, StyleProp, TextStyle} from "react-native";
 import { AntDesign, Ionicons} from "@expo/vector-icons";
 
 type Props = {
@@ -8,9 +8,10 @@ type Props = {
   value: string;
   onChange: (text: string) => void;
   error?:string;
+  errorStyle?: StyleProp<TextStyle>;
 };
 
-export default function CustomInput({type = "text",placeholder,value,onChange,error}: Props) {
+export default function CustomInput({type = "text",placeholder,value,onChange,error, errorStyle}: Props) {
   const isPasswordField = type === "password";
   const [isSecureText, setIsSecureText] = useState(type === "password");
 
@@ -26,7 +27,15 @@ export default function CustomInput({type = "text",placeholder,value,onChange,er
   return (
     <View style={styles.wrapper}>
         <View style = {styles.container}>
-            {icon && (<AntDesign name={icon as any} size ={22} color={'black'} style={styles.icons}/>)}  
+          <View style={styles.leftIconContainer}>
+            {icon && (
+              <AntDesign
+                name={icon as any}
+                size={22}
+                color={"black"}
+              />
+            )}
+          </View>
         <TextInput
             placeholder={placeholder}
             value={value}
@@ -36,49 +45,68 @@ export default function CustomInput({type = "text",placeholder,value,onChange,er
             keyboardType={keyboardType} 
         />
 
-        {isPasswordField && (
+        <View style={styles.rightIconContainer}>
+          {isPasswordField && (
             <TouchableOpacity onPress={() => setIsSecureText(!isSecureText)}>
-            <Ionicons
+              <Ionicons
                 name={isSecureText ? "eye" : "eye-off"}
-                size={30}
+                size={26}
                 color="black"
-                style={styles.icons}
-            />
+              />
             </TouchableOpacity>
-        )}
+          )}
         </View>
-        {error && <Text style = {styles.error}>{error}</Text>}
+        </View>
+        <Text style={[styles.error, errorStyle]}>
+          {error ? error : " "}
+        </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-   marginBottom: 10,
-  },
-  container:{
     width: 300,
-    alignContent:'center',
-    marginTop:10,
-    flexDirection:'row',
+    marginBottom: 6,
   },
+
+  container: {
+    width: "100%",
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
   input: {
-    borderWidth:1,
-    borderColor:'black',
-    width:250,
-    padding:10,
-    backgroundColor: 'white',
-    borderRadius: 10
+    borderWidth: 1,
+    borderColor: "black",
+    flex: 1,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
   },
 
-  icons:{
-    padding:5,
-    marginTop:5,
+  icons: {
+    width: 35,
+    textAlign: "center",
   },
 
-  error:{
-    textAlign:'left',
-    color:'red',
-    paddingLeft:35
-  }
+  error: {
+    color: "red",
+    fontSize: 13,
+    marginTop: 4,
+    marginLeft: 35,
+    minHeight: 18,
+  },
+
+  rightIconContainer: {
+  width: 40,
+  alignItems: "center",
+  justifyContent: "center",
+  },
+  leftIconContainer: {
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
