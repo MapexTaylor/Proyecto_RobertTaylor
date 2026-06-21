@@ -1,8 +1,8 @@
 import { ScrollView, View, Text, StyleSheet } from "react-native";
-import { useOrders } from "../contexts/OrdersContext";
+import { useAppSelector } from "../redux/hooks";
 
 export default function HistoryScreen() {
-  const { orders } = useOrders();
+  const orders = useAppSelector((state) => state.orders.orders);
 
   const deliveredOrders = orders.filter(
     (order) => order.status === "Entregado"

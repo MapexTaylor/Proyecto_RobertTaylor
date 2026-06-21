@@ -3,10 +3,13 @@ import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { useOrders } from "../contexts/OrdersContext";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { addOrder, Order } from "../redux/ordersSlice";
 
 export default function RegisterOrderScreen() {
 
-  const {addOrder} = useOrders();
+  const dispatch = useAppDispatch();
+  const orders = useAppSelector((state) => state.orders.orders);
 
   const [clientName, setClientName] = useState("");
   const [phone, setPhone] = useState("");
@@ -76,13 +79,22 @@ export default function RegisterOrderScreen() {
 
     
 
-    const generatedCode = addOrder({
+    const nextNumber = orders.length + 1;
+    const generatedCode = `TC-${String(nextNumber).padStart(3, "0")}`;
+
+    const newOrder: Order = {
+      id: Date.now().toString(),
+      code: generatedCode,
       clientName,
       phone,
-      marca: marca,
-      matricula: matricula,
+      marca,
+      matricula,
       problem,
-    });
+      entryDate: new Date().toLocaleDateString(),
+      status: "Recibido",
+    };
+
+    dispatch(addOrder(newOrder));
 
     Alert.alert(
       "Orden registrada",

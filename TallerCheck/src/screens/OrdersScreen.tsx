@@ -1,9 +1,12 @@
-import { ScrollView, View, Text, StyleSheet, FlatList } from "react-native";
-import { OrderStatus, useOrders } from "../contexts/OrdersContext";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import CustomButton from "../components/CustomButton";
+import { OrderStatus, updateOrderStatus } from "../redux/ordersSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 export default function OrdersScreen() {
-  const { orders, updateOrderStatus } = useOrders();
+  const dispatch = useAppDispatch();
+
+  const orders = useAppSelector((state) => state.orders.orders);
 
   const activeOrders = orders.filter(
     (order) => order.status !== "Entregado"
@@ -56,7 +59,7 @@ export default function OrdersScreen() {
   const handleUpdateStatus = (code: string, currentStatus: OrderStatus) => {
     const nextStatus = getNextStatus(currentStatus);
 
-    updateOrderStatus(code, nextStatus);
+    dispatch(updateOrderStatus({ code, status: nextStatus }));
   };
   
 

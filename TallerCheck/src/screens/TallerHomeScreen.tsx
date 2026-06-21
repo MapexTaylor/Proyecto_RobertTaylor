@@ -1,13 +1,21 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { useOrders } from "../contexts/OrdersContext";
+import { useAppSelector } from "../redux/hooks";
 
 export default function TallerHomeScreen({ navigation }: any) {
-  const { orders } = useOrders();
+  
+  const orders = useAppSelector((state) => state.orders.orders);
 
-  const activeOrders = orders.filter(
-    (order)=>order.status !== "Entregado"
+  const activeOrdersCount = orders.filter(
+    (order) => order.status !== "Entregado"
   ).length;
+
+  const deliveredOrdersCount = orders.filter(
+    (order) => order.status === "Entregado"
+  ).length;
+
+  const totalOrdersCount = orders.length;
 
   const diagnosisOrders = orders.filter(
     (order)=>order.status === "En diagnóstico"
@@ -31,7 +39,7 @@ export default function TallerHomeScreen({ navigation }: any) {
 
       <View style={styles.summaryContainer}>
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>{activeOrders}</Text>
+          <Text style={styles.summaryNumber}>{activeOrdersCount}</Text>
           <Text style={styles.summaryText}>Órdenes activas</Text>
         </View>
 

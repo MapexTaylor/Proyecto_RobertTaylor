@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { useAuth } from "../contexts/AuthContext";
-import { useOrders, Order } from "../contexts/OrdersContext";
+import { useAppSelector } from "../redux/hooks";
+import { Order } from "../redux/ordersSlice";
 
 export default function ClientSearchScreen() {
+  const orders = useAppSelector((state) => state.orders.orders);
 
-  const { findOrderByCode } = useOrders();
+  //const { findOrderByCode } = useOrders();
   const {logout} = useAuth();
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState("");
@@ -31,7 +33,10 @@ export default function ClientSearchScreen() {
       return;
     }
 
-    const foundOrder = findOrderByCode(code);
+    const foundOrder = orders.find(
+      (order) =>
+        order.code.toUpperCase() === code.toUpperCase().trim()
+    );
 
     if (!foundOrder) {
       Alert.alert(
