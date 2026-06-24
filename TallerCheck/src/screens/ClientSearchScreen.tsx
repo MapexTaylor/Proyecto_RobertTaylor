@@ -13,7 +13,6 @@ export default function ClientSearchScreen() {
 
   const orders = useAppSelector((state) => state.orders.orders);
 
-  //const { findOrderByCode } = useOrders();
   const {logout} = useAuth();
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState("");
