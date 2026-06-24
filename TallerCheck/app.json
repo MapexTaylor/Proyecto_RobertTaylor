@@ -21,10 +21,19 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.roberttaylor.tallercheck"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b79a4a68-4290-4642-9bb6-322a4e203df8"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
