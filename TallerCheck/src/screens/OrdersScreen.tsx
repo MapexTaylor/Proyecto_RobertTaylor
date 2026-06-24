@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { OrderStatus, updateOrderStatus } from "../redux/ordersSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useTheme } from "../contexts/ThemeContext";
+import { updateOrderStatusInSupabase } from "../services/ordersService";
 
 export default function OrdersScreen() {
 
@@ -59,10 +60,24 @@ export default function OrdersScreen() {
   return styles.defaultStatus;
 };
 
-  const handleUpdateStatus = (code: string, currentStatus: OrderStatus) => {
+  const handleUpdateStatus = async (
+    code: string,
+    currentStatus: OrderStatus
+  ) => {
     const nextStatus = getNextStatus(currentStatus);
 
-    dispatch(updateOrderStatus({ code, status: nextStatus }));
+    try {
+      dispatch(updateOrderStatus({ code, status: nextStatus }));
+
+      await updateOrderStatusInSupabase(code, nextStatus);
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "El estado cambió en la app, pero no se pudo actualizar en Supabase."
+      );
+
+      console.log(error);
+    }
   };
   
 
@@ -74,7 +89,9 @@ export default function OrdersScreen() {
         data={activeOrders}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No hay órdenes activas.</Text>
+          <Text style={[styles.emptyText, { color: colors.subtitle }]}>
+            No hay órdenes activas.
+          </Text>
         }
         renderItem={({ item }) => (
           <View style={[
