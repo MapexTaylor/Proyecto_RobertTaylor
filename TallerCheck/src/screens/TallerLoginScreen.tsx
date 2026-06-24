@@ -15,11 +15,12 @@ import { getOrdersFromSupabase } from "../services/ordersService";
 export default function TallerLoginScreen({ navigation }: any) {
 
     const dispatch = useAppDispatch();
+    
 
     const { colors } = useTheme();
 
     const {loginAsTaller} = useAuth();
-
+    const [isLoading, setIsLoading] = useState(false);
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [errorEmail,setEmailError] = useState("")
@@ -58,7 +59,7 @@ export default function TallerLoginScreen({ navigation }: any) {
         dispatch(setOrders(ordersFromSupabase));
 
         loginAsTaller();
-        
+
       } catch (error) {
         Alert.alert(
           "Error de inicio de sesión",
