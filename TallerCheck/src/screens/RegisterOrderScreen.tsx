@@ -2,10 +2,10 @@ import { useState } from "react";
 import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
-import { useOrders } from "../contexts/OrdersContext";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { addOrder, Order } from "../redux/ordersSlice";
 import { useTheme } from "../contexts/ThemeContext";
+import { saveOrderToSupabase } from "../services/ordersService";
 
 export default function RegisterOrderScreen() {
 
@@ -26,7 +26,7 @@ export default function RegisterOrderScreen() {
   const [matriculaError, setMatriculaError] = useState("");
   const [problemError, setProblemError] = useState("");
 
-  const handleSave = () => {
+  const handleSave = async () => {
     let isValid = true;
 
     setClientNameError("");
@@ -97,7 +97,10 @@ export default function RegisterOrderScreen() {
       status: "Recibido",
     };
 
+    try {
     dispatch(addOrder(newOrder));
+
+    await saveOrderToSupabase(newOrder);
 
     Alert.alert(
       "Orden registrada",
@@ -107,15 +110,40 @@ export default function RegisterOrderScreen() {
     setClientName("");
     setPhone("");
     setmarca("");
+    setMatricula("");
     setProblem("");
-    setMatricula("")
 
     setClientNameError("");
     setPhoneError("");
     setmarcaError("");
     setMatriculaError("");
     setProblemError("");
-  };
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "La orden se guardó en la app, pero no se pudo guardar en Supabase."
+      );
+
+    console.log(error);
+    }
+
+      Alert.alert(
+        "Orden registrada",
+        `La orden fue registrada correctamente.\nCódigo: ${generatedCode}`
+      );
+
+      setClientName("");
+      setPhone("");
+      setmarca("");
+      setProblem("");
+      setMatricula("")
+
+      setClientNameError("");
+      setPhoneError("");
+      setmarcaError("");
+      setMatriculaError("");
+      setProblemError("");
+    };
 
   return (
   <ScrollView
