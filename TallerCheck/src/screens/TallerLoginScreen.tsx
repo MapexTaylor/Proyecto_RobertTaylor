@@ -95,6 +95,12 @@ export default function TallerLoginScreen({ navigation }: any) {
         <CustomButton 
         title={'Ingresar'} 
         onPress={handleLogin}/>
+
+        <CustomButton
+        title="Crear cuenta de taller"
+        onPress={() => navigation.navigate("RegisterMechanic")}
+        variant="secondary"
+      />
         
       </View>
       <Image

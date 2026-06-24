@@ -3,8 +3,8 @@ import LoginScreen from "../screens/LoginScreen";
 import TabsNavigation from "./TabsNavigation";
 import ClientSearchScreen from "../screens/ClientSearchScreen";
 import TallerLoginScreen from "../screens/TallerLoginScreen";
-import TallerHomeScreen from "../screens/TallerHomeScreen";
 import { useAuth } from "../contexts/AuthContext";
+import RegisterMechanicScreen from "../screens/RegisterMechanicScreen";
 
 
 
@@ -13,6 +13,7 @@ export type RootStackParamList = {
     UserTabs: undefined;
     ClientSearch: undefined;
     TallerLogin: undefined;
+    RegisterMechanic: undefined;
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -25,6 +26,7 @@ export default function StackNavigator(){
                 <>
                 <Stack.Screen name="Login" component={LoginScreen}/>
                 <Stack.Screen name="TallerLogin" component={TallerLoginScreen}/>
+                <Stack.Screen name="RegisterMechanic" component={RegisterMechanicScreen}/>
                 </>
             )}
 
