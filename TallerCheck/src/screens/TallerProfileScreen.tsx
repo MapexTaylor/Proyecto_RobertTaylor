@@ -1,17 +1,37 @@
-import { View, Text, StyleSheet, Image, Switch } from "react-native";
-import { navigationRef } from "../navigation/NavigationService";
+import { View, Text, StyleSheet, Image, Switch, Alert } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
-import { Alert } from "react-native";
 import { logoutFromSupabase } from "../services/authService";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 export default function TallerProfileScreen() {
-
+  const [userEmail, setUserEmail] = useState("");
   const { theme, colors, toggleTheme } = useTheme();
 
   const {logout} = useAuth();
+
+  useEffect(() => {
+  const getUserEmail = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      console.log("Error obteniendo usuario:", error);
+      return;
+    }
+
+    if (user?.email) {
+      setUserEmail(user.email);
+    }
+  };
+
+  getUserEmail();
+}, []);
 
   const handleLogout = async () => {
     try {
@@ -37,7 +57,7 @@ export default function TallerProfileScreen() {
         <Text style={[[styles.value, { color: colors.subtitle }], { color: colors.subtitle }]}>TallerCheck Servicio Técnico</Text>
 
         <Text style={[styles.label, { color: colors.text }]}>Usuario:</Text>
-        <Text style={[styles.value, { color: colors.subtitle }]}>Mecánico / Taller</Text>
+        <Text style={[styles.value, { color: colors.subtitle }]}>{userEmail || "Correo no disponible"}</Text>
 
         <View style={styles.themeRow}>
           <Text style={[styles.label, { color: colors.text }]}>
