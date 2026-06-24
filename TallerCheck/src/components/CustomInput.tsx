@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {View, TextInput,TouchableOpacity,StyleSheet, KeyboardTypeOptions,Text, StyleProp, TextStyle} from "react-native";
 import { AntDesign, Ionicons} from "@expo/vector-icons";
+import { useTheme } from "../contexts/ThemeContext";
 
 type Props = {
   type?: "text" | "email" | "number" | "password";
@@ -12,6 +13,9 @@ type Props = {
 };
 
 export default function CustomInput({type = "text",placeholder,value,onChange,error, errorStyle}: Props) {
+
+  const { colors } = useTheme();
+
   const isPasswordField = type === "password";
   const [isSecureText, setIsSecureText] = useState(type === "password");
 
@@ -32,15 +36,17 @@ export default function CustomInput({type = "text",placeholder,value,onChange,er
               <AntDesign
                 name={icon as any}
                 size={22}
-                color={"black"}
+                color={colors.text}
+                style={styles.icons}
               />
             )}
           </View>
         <TextInput
             placeholder={placeholder}
+            placeholderTextColor={colors.subtitle}
             value={value}
             onChangeText={onChange}
-            style={styles.input}
+            style={[styles.input,{backgroundColor: colors.inputBackground,color: colors.text,borderColor: colors.border,},]}
             secureTextEntry={isSecureText}
             keyboardType={keyboardType} 
         />
@@ -50,8 +56,9 @@ export default function CustomInput({type = "text",placeholder,value,onChange,er
             <TouchableOpacity onPress={() => setIsSecureText(!isSecureText)}>
               <Ionicons
                 name={isSecureText ? "eye" : "eye-off"}
-                size={26}
-                color="black"
+                size={30}
+                color={colors.text}
+                style={styles.icons}
               />
             </TouchableOpacity>
           )}

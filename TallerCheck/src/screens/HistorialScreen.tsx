@@ -1,7 +1,11 @@
 import { ScrollView, View, Text, StyleSheet } from "react-native";
 import { useAppSelector } from "../redux/hooks";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function HistoryScreen() {
+
+  const { colors } = useTheme();
+
   const orders = useAppSelector((state) => state.orders.orders);
 
   const deliveredOrders = orders.filter(
@@ -9,26 +13,26 @@ export default function HistoryScreen() {
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Historial</Text>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Historial</Text>
 
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: colors.subtitle }]}>
         Reparaciones que ya fueron entregadas al cliente.
       </Text>
 
       {deliveredOrders.map((order) => (
-        <View key={order.id} style={styles.card}>
+        <View key={order.id} style={[styles.card,{backgroundColor: colors.card,borderColor: colors.border,},]}>
           <View style={styles.cardHeader}>
-            <Text style={styles.code}>{order.code}</Text>
+            <Text style={[styles.code, { color: colors.primary }]}>{order.code}</Text>
             <Text style={styles.status}>{order.status}</Text>
           </View>
 
-          <Text style={styles.text}>Cliente: {order.clientName}</Text>
-          <Text style={styles.text}>Teléfono: {order.phone}</Text>
-          <Text style={styles.text}>Vehículo: {order.marca}</Text>
-          <Text style={styles.text}>Matrícula: {order.matricula}</Text>
-          <Text style={styles.text}>Problema: {order.problem}</Text>
-          <Text style={styles.date}>Fecha de ingreso: {order.entryDate}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>Cliente: {order.clientName}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>Teléfono: {order.phone}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>Vehículo: {order.marca}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>Matrícula: {order.matricula}</Text>
+          <Text style={[styles.text, { color: colors.text }]}>Problema: {order.problem}</Text>
+          <Text style={[styles.date, { color: colors.mutedText }]}>Fecha de ingreso: {order.entryDate}</Text>
         </View>
       ))}
     </ScrollView>

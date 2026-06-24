@@ -2,8 +2,11 @@ import { View, Text, StyleSheet, FlatList } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { OrderStatus, updateOrderStatus } from "../redux/ordersSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function OrdersScreen() {
+
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
 
   const orders = useAppSelector((state) => state.orders.orders);
@@ -64,8 +67,8 @@ export default function OrdersScreen() {
   
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Órdenes activas 🛠️</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Órdenes activas 🛠️</Text>
 
       <FlatList
         data={activeOrders}
@@ -74,14 +77,20 @@ export default function OrdersScreen() {
           <Text style={styles.emptyText}>No hay órdenes activas.</Text>
         }
         renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.code}>{item.code}</Text>
-            <Text>Cliente: {item.clientName}</Text>
-            <Text>Teléfono: {item.phone}</Text>
-            <Text>Marca de vehículo: {item.marca}</Text>
-            <Text>Matricula: {item.matricula}</Text>
-            <Text>Problema: {item.problem}</Text>
-            <Text>Fecha de ingreso: {item.entryDate}</Text>
+          <View style={[
+            styles.card,
+            {
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+            },
+          ]}>
+            <Text style={[styles.code, { color: colors.primary }]}>{item.code}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>Cliente: {item.clientName}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>Teléfono: {item.phone}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>Marca de vehículo: {item.marca}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>Matricula: {item.matricula}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>Problema: {item.problem}</Text>
+            <Text style={[styles.date, { color: colors.mutedText }]}>Fecha de ingreso: {item.entryDate}</Text>
 
             <Text style={[styles.status, getStatusStyle(item.status)]}>
               Estado actual: {item.status}

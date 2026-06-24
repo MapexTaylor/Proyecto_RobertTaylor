@@ -5,16 +5,19 @@ import { AuthProvider } from './src/contexts/AuthContext';
 import { OrdersProvider } from './src/contexts/OrdersContext';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
+import { ThemeProvider } from "./src/contexts/ThemeContext";
 
 export default function App() {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <OrdersProvider>
-          <NavigationContainer ref={navigationRef}>
-            <StackNavigator></StackNavigator>
-          </NavigationContainer>
-        </OrdersProvider>
+        <ThemeProvider>
+          <OrdersProvider>
+            <NavigationContainer ref={navigationRef}>
+              <StackNavigator></StackNavigator>
+            </NavigationContainer>
+          </OrdersProvider>
+        </ThemeProvider>
       </AuthProvider>
     </Provider>
     

@@ -5,8 +5,11 @@ import CustomButton from "../components/CustomButton";
 import { useOrders } from "../contexts/OrdersContext";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { addOrder, Order } from "../redux/ordersSlice";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function RegisterOrderScreen() {
+
+  const { colors } = useTheme();
 
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.orders);
@@ -116,16 +119,16 @@ export default function RegisterOrderScreen() {
 
   return (
   <ScrollView
-    style={styles.container}
+    style={[styles.container, { backgroundColor: colors.background }]}
     contentContainerStyle={styles.contentContainer}
   >
-    <Text style={styles.title}>Nueva Orden 📝</Text>
+    <Text style={[styles.title, { color: colors.text }]}>Nueva Orden 📝</Text>
 
-    <Text style={styles.subtitle}>
+    <Text style={[styles.subtitle, { color: colors.subtitle }]}>
       Registre los datos principales de la reparación.
     </Text>
 
-    <View style={styles.form}>
+    <View style={[styles.form,{backgroundColor: colors.card,borderColor: colors.border,},]}>
       <View style={styles.input}>
         <CustomInput
         type="text"

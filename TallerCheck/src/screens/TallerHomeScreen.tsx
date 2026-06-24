@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../components/CustomButton";
-import { useOrders } from "../contexts/OrdersContext";
 import { useAppSelector } from "../redux/hooks";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function TallerHomeScreen({ navigation }: any) {
+
+  const { colors } = useTheme();
   
   const orders = useAppSelector((state) => state.orders.orders);
 
@@ -30,32 +32,32 @@ export default function TallerHomeScreen({ navigation }: any) {
   ).length;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Panel del Taller 🔧</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Panel del Taller 🔧</Text>
 
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: colors.subtitle }]}>
         Administra y revisa el estado de las reparaciones registradas.
       </Text>
 
       <View style={styles.summaryContainer}>
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>{activeOrdersCount}</Text>
-          <Text style={styles.summaryText}>Órdenes activas</Text>
+        <View style={[[styles.summaryCard,{backgroundColor: colors.card,borderColor: colors.border,},],{backgroundColor: colors.card,borderColor: colors.border,},]}>
+          <Text style={[[styles.summaryNumber, { color: colors.primary }], { color: colors.primary }]}>{activeOrdersCount}</Text>
+          <Text style={[[styles.summaryText, { color: colors.text }], { color: colors.text }]}>Órdenes activas</Text>
         </View>
 
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>{diagnosisOrders}</Text>
-          <Text style={styles.summaryText}>En diagnóstico</Text>
+        <View style={[styles.summaryCard,{backgroundColor: colors.card,borderColor: colors.border,},]}>
+          <Text style={[styles.summaryNumber, { color: colors.primary }]}>{diagnosisOrders}</Text>
+          <Text style={[[styles.summaryText, { color: colors.text }], { color: colors.text }]}>En diagnóstico</Text>
         </View>
 
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>{repairingOrders}</Text>
-          <Text style={styles.summaryText}>En reparación</Text>
+        <View style={[styles.summaryCard,{backgroundColor: colors.card,borderColor: colors.border,},]}>
+          <Text style={[styles.summaryNumber, { color: colors.primary }]}>{repairingOrders}</Text>
+          <Text style={[styles.summaryText, { color: colors.text }]}>En reparación</Text>
         </View>
 
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryNumber}>{readyToGoOrders}</Text>
-          <Text style={styles.summaryText}>Listas para entrega</Text>
+        <View style={[styles.summaryCard,{backgroundColor: colors.card,borderColor: colors.border,},]}>
+          <Text style={[styles.summaryNumber, { color: colors.primary }]}>{readyToGoOrders}</Text>
+          <Text style={[styles.summaryText, { color: colors.text }]}>Listas para entrega</Text>
         </View>
       </View>
 

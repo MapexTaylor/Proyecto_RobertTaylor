@@ -1,9 +1,18 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Switch } from "react-native";
 import { navigationRef } from "../navigation/NavigationService";
 import CustomButton from "../components/CustomButton";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function TallerProfileScreen() {
+
+  //<CustomButton
+  //        title={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
+  //        onPress={toggleTheme}
+  //        variant="primary"
+  //      />
+
+  const { theme, colors, toggleTheme } = useTheme();
 
   const {logout} = useAuth();
 
@@ -12,29 +21,36 @@ export default function TallerProfileScreen() {
     }
   
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       <Image
         source={require("../../assets/Mec_Icon.png")}
         style={styles.image}
       />
 
-      <Text style={styles.title}>Perfil del Taller</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Perfil del Taller</Text>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>Nombre del taller:</Text>
-        <Text style={styles.value}>TallerCheck Servicio Técnico</Text>
+      <View style={[styles.card,{backgroundColor: colors.card,borderColor: colors.border,},]}>
+        <Text style={[[styles.label, { color: colors.text }], { color: colors.text }]}>Nombre del taller:</Text>
+        <Text style={[[styles.value, { color: colors.subtitle }], { color: colors.subtitle }]}>TallerCheck Servicio Técnico</Text>
 
-        <Text style={styles.label}>Encargado:</Text>
-        <Text style={styles.value}>Robert Taylor</Text>
+        <Text style={[styles.label, { color: colors.text }]}>Usuario:</Text>
+        <Text style={[styles.value, { color: colors.subtitle }]}>Mecánico / Taller</Text>
 
-        <Text style={styles.label}>Correo:</Text>
-        <Text style={styles.value}>robert.taylor@tallercheck.com</Text>
+        <View style={styles.themeRow}>
+          <Text style={[styles.label, { color: colors.text }]}>
+            Modo oscuro
+          </Text>
 
-        <Text style={styles.label}>Teléfono:</Text>
-        <Text style={styles.value}>9999-9999</Text>
-
-        <Text style={styles.label}>Horario:</Text>
-        <Text style={styles.value}>Lunes a sábado, 8:00 a.m. - 5:00 p.m.</Text>
+          <Switch
+            value={theme === "dark"}
+            onValueChange={toggleTheme}
+            trackColor={{
+              false: "#ccc",
+              true: colors.primary,
+            }}
+            thumbColor={theme === "dark" ? colors.card : "#f4f3f4"}
+          />
+        </View>
       </View>
 
       <CustomButton 
@@ -86,4 +102,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#555",
   },
+  themeRow: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: 20,
+  paddingTop: 15,
+  borderTopWidth: 1,
+  borderTopColor: "#ddd",
+},
 });

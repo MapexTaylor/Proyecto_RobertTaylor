@@ -4,9 +4,12 @@ import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from "../contexts/ThemeContext";
 
 
 export default function TallerLoginScreen({ navigation }: any) {
+
+    const { colors } = useTheme();
 
     const {loginAsTaller} = useAuth();
 
@@ -45,10 +48,10 @@ export default function TallerLoginScreen({ navigation }: any) {
     }
 
     return (
-    <View style={styles.container}>
-        <View style={styles.mainArea}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.mainArea,{backgroundColor: colors.card,borderColor: colors.border,},]}>
         
-        <Text style = {styles.text}>Incia sesión</Text>
+        <Text style = {[styles.text, { color: colors.text }]}>Incia sesión</Text>
         <StatusBar style="auto" />
 
         <CustomInput 

@@ -5,8 +5,11 @@ import CustomButton from "../components/CustomButton";
 import { useAuth } from "../contexts/AuthContext";
 import { useAppSelector } from "../redux/hooks";
 import { Order } from "../redux/ordersSlice";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function ClientSearchScreen() {
+  const { colors } = useTheme();
+
   const orders = useAppSelector((state) => state.orders.orders);
 
   //const { findOrderByCode } = useOrders();
@@ -100,16 +103,16 @@ export default function ClientSearchScreen() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.contentContainer}
     >
-      <Text style={styles.title}>Consulta de Reparación</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Consulta de Reparación</Text>
 
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: colors.subtitle }]}>
         Ingrese el código que le entregó el taller para revisar el estado de su reparación.
       </Text>
 
-      <View style={styles.searchCard}>
+      <View style={[styles.searchCard,{backgroundColor: colors.card,borderColor: colors.border,},]}>
         <View style={styles.input}>
             <CustomInput
             type="text"
@@ -127,27 +130,27 @@ export default function ClientSearchScreen() {
       </View>
 
       {orderFound && (
-        <View style={styles.resultCard}>
-          <Text style={styles.resultTitle}>Resultado de la reparación</Text>
+        <View style={[styles.resultCard,{backgroundColor: colors.card,borderColor: colors.border,},]}>
+          <Text style={[styles.resultTitle, { color: colors.text }]}>Resultado de la reparación</Text>
 
-          <Text style={styles.code}>{orderFound.code}</Text>
+          <Text style={[styles.code, { color: colors.primary }]}>{orderFound.code}</Text>
 
-          <Text style={styles.label}>Cliente:</Text>
-          <Text style={styles.value}>{orderFound.clientName}</Text>
+          <Text style={[[styles.label, { color: colors.text }], { color: colors.text }]}>Cliente:</Text>
+          <Text style={[styles.value, { color: colors.subtitle }]}>{orderFound.clientName}</Text>
 
-          <Text style={styles.label}>Vehículo:</Text>
-          <Text style={styles.value}>{orderFound.marca}</Text>
+          <Text style={[styles.label, { color: colors.text }]}>Vehículo:</Text>
+          <Text style={[styles.value, { color: colors.subtitle }]}>{orderFound.marca}</Text>
 
-          <Text style={styles.label}>Problema reportado:</Text>
-          <Text style={styles.value}>{orderFound.problem}</Text>
+          <Text style={[styles.label, { color: colors.text }]}>Problema reportado:</Text>
+          <Text style={[styles.value, { color: colors.subtitle }]}>{orderFound.problem}</Text>
 
-          <Text style={styles.label}>Fecha de ingreso:</Text>
-          <Text style={styles.value}>{orderFound.entryDate}</Text>
+          <Text style={[styles.label, { color: colors.text }]}>Fecha de ingreso:</Text>
+          <Text style={[styles.value, { color: colors.subtitle }]}>{orderFound.entryDate}</Text>
 
-          <Text style={styles.label}>Estado actual:</Text>
+          <Text style={[styles.label, { color: colors.text }]}>Estado actual:</Text>
           <Text style={[styles.status, getStatusStyle(orderFound.status)]}>{orderFound.status}</Text>
 
-          <Text style={styles.message}>
+          <Text style={[styles.message, { color: colors.text }]}>
             {getClientMessage(orderFound.status)}
           </Text>
         </View>
@@ -194,8 +197,8 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   input:{
-    alignItems:'center',
-    marginLeft:45
+    width: "100%",
+    alignItems: "center",
   },
   resultCard: {
     backgroundColor: "#fff",

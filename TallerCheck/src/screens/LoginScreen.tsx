@@ -2,8 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function LoginScreen({navigation}:any){
+
+    const { colors } = useTheme();
 
     const {loginAsCliente} = useAuth();
 
@@ -16,10 +19,10 @@ export default function LoginScreen({navigation}:any){
     }
 
     return (
-    <View style={styles.container}>
-        <View style={styles.mainArea}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.mainArea,{ backgroundColor: colors.card, borderColor: colors.border,},]}>
         
-        <Text style = {styles.text}>TallerCheck</Text>
+        <Text style = {[styles.text, { color: colors.text }]}>TallerCheck</Text>
         <StatusBar style="auto" />
 
     

@@ -7,7 +7,7 @@ import TallerHomeScreen from "../screens/TallerHomeScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import RegisterOrderScreen from "../screens/RegisterOrderScreen";
 import TallerProfileScreen from "../screens/TallerProfileScreen";
-
+import { useTheme } from "../contexts/ThemeContext";
 
 
 type TabsParamList={
@@ -24,9 +24,21 @@ type Props = NativeStackScreenProps<RootStackParamList,"UserTabs">;
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export default function TabsNavigation(){
+
+    const { colors } = useTheme();
+
     return(
         <Tab.Navigator 
-        screenOptions={{tabBarActiveTintColor: '#1150af'}}>
+        screenOptions={{
+            headerShown: false,
+            tabBarStyle: {
+            backgroundColor: colors.tabBar,
+            borderTopColor: colors.border,
+            },
+            tabBarActiveTintColor: colors.tabActive,
+            tabBarInactiveTintColor: colors.tabInactive,
+        }}>
+            
             <Tab.Screen
             name="Home"
             component={TallerHomeScreen}
