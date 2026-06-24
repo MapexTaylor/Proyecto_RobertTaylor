@@ -5,9 +5,16 @@ import CustomInput from '../components/CustomInput';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from "../contexts/ThemeContext";
+import { Alert } from "react-native";
+import { loginWithEmail } from "../services/authService";
+import { useAppDispatch } from "../redux/hooks";
+import { setOrders } from "../redux/ordersSlice";
+import { getOrdersFromSupabase } from "../services/ordersService";
 
 
 export default function TallerLoginScreen({ navigation }: any) {
+
+    const dispatch = useAppDispatch();
 
     const { colors } = useTheme();
 
@@ -18,34 +25,49 @@ export default function TallerLoginScreen({ navigation }: any) {
     const [errorEmail,setEmailError] = useState("")
     const [errorPass,setErrorPass] = useState("")
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
       let isValid = true;
 
       setEmailError("");
       setErrorPass("");
 
-      if(email.trim() === ""){
+      if (email.trim() === "") {
         setEmailError("El correo es obligatorio.");
-        isValid=false;
-      } else if(!email.endsWith("@taller.com")){
-        setEmailError("El correo es invalido.");
-        isValid=false;
-      }
-
-      if(password.trim() === ""){
-        setErrorPass("La contraseña es obligatoria");
         isValid = false;
-      } else if (password.length <= 4) {
-        setErrorPass("La contraseña debe tener más de 4 caracteres.");
+      } else if (!email.includes("@")) {
+        setEmailError("Ingrese un correo válido.");
         isValid = false;
       }
 
-      if(!isValid){
+      if (password.trim() === "") {
+        setErrorPass("La contraseña es obligatoria.");
+        isValid = false;
+      } else if (password.length < 6) {
+        setErrorPass("La contraseña debe tener al menos 6 caracteres.");
+        isValid = false;
+      }
+
+      if (!isValid) {
         return;
       }
 
-      loginAsTaller();
-    }
+      try {
+        await loginWithEmail(email.trim(), password);
+
+        const ordersFromSupabase = await getOrdersFromSupabase();
+        dispatch(setOrders(ordersFromSupabase));
+
+        loginAsTaller();
+        
+      } catch (error) {
+        Alert.alert(
+          "Error de inicio de sesión",
+          "Correo o contraseña incorrectos."
+        );
+
+        console.log(error);
+      }
+    };
 
     return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
