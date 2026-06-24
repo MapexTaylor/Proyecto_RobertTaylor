@@ -25,13 +25,17 @@ type OrdersState = {
 };
 
 const initialState: OrdersState = {
-    orders: ordersData as Order[],
+  orders: [],
 };
 
 const ordersSlice = createSlice({
     name: "orders",
     initialState,
     reducers:{
+        setOrders: (state, action: PayloadAction<Order[]>) => {
+        state.orders = action.payload;
+        },
+
         addOrder: (state, action: PayloadAction<Order>) => {
             state.orders.push(action.payload);
         },
@@ -51,5 +55,5 @@ const ordersSlice = createSlice({
     },
 });
 
-export const { addOrder, updateOrderStatus } = ordersSlice.actions;
+export const { addOrder, updateOrderStatus, setOrders } = ordersSlice.actions;
 export default ordersSlice.reducer;
