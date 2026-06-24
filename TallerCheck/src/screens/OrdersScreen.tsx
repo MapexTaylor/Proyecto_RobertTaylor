@@ -4,9 +4,11 @@ import { OrderStatus, updateOrderStatus } from "../redux/ordersSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useTheme } from "../contexts/ThemeContext";
 import { updateOrderStatusInSupabase } from "../services/ordersService";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function OrdersScreen() {
 
+  const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const dispatch = useAppDispatch();
 
@@ -82,7 +84,7 @@ export default function OrdersScreen() {
   
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top + 20, }]}>
       <Text style={[styles.title, { color: colors.text }]}>Órdenes activas 🛠️</Text>
 
       <FlatList
@@ -137,7 +139,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 25,
-    marginTop:50
   },
   card: {
     backgroundColor: "#fff",
