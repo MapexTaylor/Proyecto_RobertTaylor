@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ScrollView, View, Text, StyleSheet, Alert } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppDispatch} from "../redux/hooks";
 import { addOrder, Order } from "../redux/ordersSlice";
 import { useTheme } from "../contexts/ThemeContext";
 import { saveOrderToSupabase } from "../services/ordersService";
@@ -13,7 +13,6 @@ export default function RegisterOrderScreen() {
   const { colors } = useTheme();
 
   const dispatch = useAppDispatch();
-  const orders = useAppSelector((state) => state.orders.orders);
 
   const [clientName, setClientName] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,6 +25,18 @@ export default function RegisterOrderScreen() {
   const [marcaError, setmarcaError] = useState("");
   const [matriculaError, setMatriculaError] = useState("");
   const [problemError, setProblemError] = useState("");
+
+  const generateUniqueCode = () => {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "TC-";
+
+  for (let i = 0; i < 5; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+
+  return code;
+};
 
   const handleSave = async () => {
     let isValid = true;
@@ -81,10 +92,7 @@ export default function RegisterOrderScreen() {
       return;
     }
 
-    
-
-    const nextNumber = orders.length + 1;
-    const generatedCode = `TC-${String(nextNumber).padStart(3, "0")}`;
+    const generatedCode = generateUniqueCode();
 
     const newOrder: Order = {
       id: Date.now().toString(),
@@ -99,9 +107,9 @@ export default function RegisterOrderScreen() {
     };
 
     try {
-    dispatch(addOrder(newOrder));
-
     await saveOrderToSupabase(newOrder);
+
+    dispatch(addOrder(newOrder));
 
     Alert.alert(
       "Orden registrada",
@@ -127,23 +135,6 @@ export default function RegisterOrderScreen() {
 
     console.log(error);
     }
-
-      Alert.alert(
-        "Orden registrada",
-        `La orden fue registrada correctamente.\nCódigo: ${generatedCode}`
-      );
-
-      setClientName("");
-      setPhone("");
-      setmarca("");
-      setProblem("");
-      setMatricula("")
-
-      setClientNameError("");
-      setPhoneError("");
-      setmarcaError("");
-      setMatriculaError("");
-      setProblemError("");
     };
 
   return (
