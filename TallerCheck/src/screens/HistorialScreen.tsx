@@ -1,6 +1,7 @@
 import { ScrollView, View, Text, StyleSheet } from "react-native";
 import { useAppSelector } from "../redux/hooks";
 import { useTheme } from "../contexts/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HistoryScreen() {
 
@@ -13,6 +14,7 @@ export default function HistoryScreen() {
   );
 
   return (
+  <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>Historial</Text>
 
@@ -36,6 +38,7 @@ export default function HistoryScreen() {
         </View>
       ))}
     </ScrollView>
+  </SafeAreaView>
   );
 }
 

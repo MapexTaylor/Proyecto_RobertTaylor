@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from "../contexts/ThemeContext";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen({navigation}:any){
 
@@ -19,7 +20,7 @@ export default function LoginScreen({navigation}:any){
     }
 
     return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={[styles.mainArea,{ backgroundColor: colors.card, borderColor: colors.border,},]}>
         
         <Text style = {[styles.text, { color: colors.text }]}>TallerCheck</Text>
@@ -40,7 +41,7 @@ export default function LoginScreen({navigation}:any){
         source={require("../../assets/M.png")}
         style={styles.image}
         />
-    </View>
+    </SafeAreaView>
     );
 }
 

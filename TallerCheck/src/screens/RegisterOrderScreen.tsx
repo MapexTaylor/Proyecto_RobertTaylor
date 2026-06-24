@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { addOrder, Order } from "../redux/ordersSlice";
 import { useTheme } from "../contexts/ThemeContext";
 import { saveOrderToSupabase } from "../services/ordersService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterOrderScreen() {
 
@@ -146,67 +147,69 @@ export default function RegisterOrderScreen() {
     };
 
   return (
-  <ScrollView
-    style={[styles.container, { backgroundColor: colors.background }]}
-    contentContainerStyle={styles.contentContainer}
-  >
-    <Text style={[styles.title, { color: colors.text }]}>Nueva Orden 📝</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <Text style={[styles.title, { color: colors.text }]}>Nueva Orden 📝</Text>
 
-    <Text style={[styles.subtitle, { color: colors.subtitle }]}>
-      Registre los datos principales de la reparación.
-    </Text>
+      <Text style={[styles.subtitle, { color: colors.subtitle }]}>
+        Registre los datos principales de la reparación.
+      </Text>
 
-    <View style={[styles.form,{backgroundColor: colors.card,borderColor: colors.border,},]}>
-      <View style={styles.input}>
-        <CustomInput
-        type="text"
-        placeholder="Nombre del cliente"
-        value={clientName}
-        onChange={setClientName}
-        error={clientNameError}
-      />
-
-      <CustomInput
-        type="number"
-        placeholder="Teléfono"
-        value={phone}
-        onChange={setPhone}
-        error={phoneError}
-      />
-
-      <CustomInput
-        type="text"
-        placeholder="Vehículo recibido"
-        value={marca}
-        onChange={setmarca}
-        error={marcaError}
-      />
-
-      <CustomInput
-        type="text"
-        placeholder="Matricula de su vehiculo"
-        value={matricula.toUpperCase()}
-        onChange={(text) => setMatricula(text.toUpperCase())}
-        error={matriculaError}
-      />
-
-      <CustomInput
-        type="text"
-        placeholder="Problema reportado"
-        value={problem}
-        onChange={setProblem}
-        error={problemError}
-      />
-      </View>
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          title="Registrar orden"
-          onPress={handleSave}
-          variant="primary"
+      <View style={[styles.form,{backgroundColor: colors.card,borderColor: colors.border,},]}>
+        <View style={styles.input}>
+          <CustomInput
+          type="text"
+          placeholder="Nombre del cliente"
+          value={clientName}
+          onChange={setClientName}
+          error={clientNameError}
         />
+
+        <CustomInput
+          type="number"
+          placeholder="Teléfono"
+          value={phone}
+          onChange={setPhone}
+          error={phoneError}
+        />
+
+        <CustomInput
+          type="text"
+          placeholder="Vehículo recibido"
+          value={marca}
+          onChange={setmarca}
+          error={marcaError}
+        />
+
+        <CustomInput
+          type="text"
+          placeholder="Matricula de su vehiculo"
+          value={matricula.toUpperCase()}
+          onChange={(text) => setMatricula(text.toUpperCase())}
+          error={matriculaError}
+        />
+
+        <CustomInput
+          type="text"
+          placeholder="Problema reportado"
+          value={problem}
+          onChange={setProblem}
+          error={problemError}
+        />
+        </View>
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Registrar orden"
+            onPress={handleSave}
+            variant="primary"
+          />
+        </View>
       </View>
-    </View>
-  </ScrollView>
+    </ScrollView>
+  </SafeAreaView>
 );
 }
 

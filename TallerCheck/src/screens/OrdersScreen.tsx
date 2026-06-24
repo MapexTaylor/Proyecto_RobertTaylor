@@ -4,7 +4,7 @@ import { OrderStatus, updateOrderStatus } from "../redux/ordersSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useTheme } from "../contexts/ThemeContext";
 import { updateOrderStatusInSupabase } from "../services/ordersService";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function OrdersScreen() {
 
@@ -84,7 +84,7 @@ export default function OrdersScreen() {
   
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top + 20, }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>Órdenes activas 🛠️</Text>
 
       <FlatList
@@ -123,7 +123,7 @@ export default function OrdersScreen() {
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { useAppSelector } from "../redux/hooks";
 import { useTheme } from "../contexts/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TallerHomeScreen({ navigation }: any) {
 
@@ -32,7 +33,7 @@ export default function TallerHomeScreen({ navigation }: any) {
   ).length;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>Panel del Taller 🔧</Text>
 
       <Text style={[styles.subtitle, { color: colors.subtitle }]}>
@@ -80,7 +81,7 @@ export default function TallerHomeScreen({ navigation }: any) {
           variant="secondary"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

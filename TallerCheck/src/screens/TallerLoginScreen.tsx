@@ -10,6 +10,7 @@ import { loginWithEmail } from "../services/authService";
 import { useAppDispatch } from "../redux/hooks";
 import { setOrders } from "../redux/ordersSlice";
 import { getOrdersFromSupabase } from "../services/ordersService";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function TallerLoginScreen({ navigation }: any) {
@@ -71,7 +72,7 @@ export default function TallerLoginScreen({ navigation }: any) {
     };
 
     return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={[styles.mainArea,{backgroundColor: colors.card,borderColor: colors.border,},]}>
         
         <Text style = {[styles.text, { color: colors.text }]}>Incia sesión</Text>
@@ -100,7 +101,7 @@ export default function TallerLoginScreen({ navigation }: any) {
         source={require("../../assets/M.png")}
         style={styles.image}
         />
-    </View>
+    </SafeAreaView>
     );
 }
 

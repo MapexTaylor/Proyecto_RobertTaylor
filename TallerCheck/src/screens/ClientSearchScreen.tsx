@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useAppSelector } from "../redux/hooks";
 import { Order } from "../redux/ordersSlice";
 import { useTheme } from "../contexts/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ClientSearchScreen() {
   const { colors } = useTheme();
@@ -102,6 +103,7 @@ export default function ClientSearchScreen() {
 
 
   return (
+  <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.contentContainer}
@@ -159,6 +161,7 @@ export default function ClientSearchScreen() {
             title={"Volver al inicio!"} 
             onPress={handleLogout}/>
     </ScrollView>
+  </SafeAreaView>  
   );
 }
 

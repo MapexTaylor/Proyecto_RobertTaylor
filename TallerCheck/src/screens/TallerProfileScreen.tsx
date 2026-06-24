@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { Alert } from "react-native";
 import { logoutFromSupabase } from "../services/authService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TallerProfileScreen() {
 
@@ -23,7 +24,7 @@ export default function TallerProfileScreen() {
   };
   
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <Image
         source={require("../../assets/Mec_Icon.png")}
         style={styles.image}
@@ -58,7 +59,7 @@ export default function TallerProfileScreen() {
       <CustomButton 
       title={"Cerrar Sesión"} 
       onPress={handleLogout}/>
-    </View>
+    </SafeAreaView>
   );
 }
 
