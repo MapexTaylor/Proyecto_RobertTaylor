@@ -12,11 +12,9 @@ export default function App() {
     <Provider store={store}>
       <AuthProvider>
         <ThemeProvider>
-          <OrdersProvider>
-            <NavigationContainer ref={navigationRef}>
-              <StackNavigator></StackNavigator>
-            </NavigationContainer>
-          </OrdersProvider>
+          <NavigationContainer ref={navigationRef}>
+            <StackNavigator></StackNavigator>
+          </NavigationContainer>
         </ThemeProvider>
       </AuthProvider>
     </Provider>

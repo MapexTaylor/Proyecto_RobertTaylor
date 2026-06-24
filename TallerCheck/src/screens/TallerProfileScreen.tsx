@@ -3,22 +3,24 @@ import { navigationRef } from "../navigation/NavigationService";
 import CustomButton from "../components/CustomButton";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
+import { Alert } from "react-native";
+import { logoutFromSupabase } from "../services/authService";
 
 export default function TallerProfileScreen() {
-
-  //<CustomButton
-  //        title={theme === "light" ? "Cambiar a modo oscuro" : "Cambiar a modo claro"}
-  //        onPress={toggleTheme}
-  //        variant="primary"
-  //      />
 
   const { theme, colors, toggleTheme } = useTheme();
 
   const {logout} = useAuth();
 
-  const handleLogout = () =>{
-        logout();
+  const handleLogout = async () => {
+    try {
+      await logoutFromSupabase();
+      logout();
+    } catch (error) {
+      Alert.alert("Error", "No se pudo cerrar sesión correctamente.");
+      console.log(error);
     }
+  };
   
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
